@@ -14,7 +14,7 @@ KiCad-BOM-CPL-Plugin is distributed in the hope that it will be useful, but **WI
 
 ### License:
 
-OAuth2OOo is free software; you can redistribute it and/or modify it under the terms of either (at your option):
+KiCad-BOM-CPL-Plugin is free software; you can redistribute it and/or modify it under the terms of either (at your option):
 
 - The Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one [at](http://mozilla.org/MPL/2.0/).
 
