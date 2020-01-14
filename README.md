@@ -20,8 +20,7 @@ It is necessary for the operation to add 4 additional fields in Eeschema, which 
 it is also possible to add an optional 'Quantity' field in order to be able to manage the quantities in Eeschema.
 In the absence of this field, the default quantity is 1.
 
-if necessary, a grouping is carried out on the quantities  
-making it possible to generate a single line for identical components in the BOM file.
+if necessary, a grouping is carried out on the quantities, making it possible to generate a single row for identical components in the BOM file.
 
 If you know a little Python, the grouping and the order of the components in the BOM files is fully configurable ...
 
