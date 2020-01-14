@@ -33,6 +33,7 @@ from collections import OrderedDict
 
 g_bomext = 'BOM'
 g_cplext = 'CPL'
+g_posfiles = ('all-pos', 'top-pos', 'bottom-pos')
 
 g_suppliers = {}
 g_suppliers['Default'] = {}
@@ -46,7 +47,7 @@ g_suppliers['Default']['fields']['Package'] = 'footprint'
 g_suppliers['Default']['equal'] = ('PartNumber', 'SupplierRef')
 g_suppliers['Default']['sorted'] = ('Manufacturer', 'PartNumber')
 g_suppliers['Default']['grouped'] = True
-g_suppliers['Default']['pclfiles'] = ()
+g_suppliers['Default']['generatecpl'] = False
 g_suppliers['JLCPCB'] = {}
 g_suppliers['JLCPCB']['fields'] = OrderedDict()
 g_suppliers['JLCPCB']['fields']['Comment'] = 'value'
@@ -56,8 +57,8 @@ g_suppliers['JLCPCB']['fields']['LCSC Part #'] = 'SupplierRef'
 g_suppliers['JLCPCB']['equal'] = ('ref', )
 g_suppliers['JLCPCB']['sorted'] = ('SupplierRef', )
 g_suppliers['JLCPCB']['grouped'] = False
-g_suppliers['JLCPCB']['pclfiles'] = ('all-pos', 'top-pos', 'bottom-pos')
-g_suppliers['JLCPCB']['pclheaders'] = {0: 'Designator',
+g_suppliers['JLCPCB']['generatecpl'] = True
+g_suppliers['JLCPCB']['cplheaders'] = {0: 'Designator',
                                        3: 'Mid X',
                                        4: 'Mid Y',
                                        5: 'Rotation',
@@ -73,20 +74,20 @@ g_suppliers['LCSC']['fields']['Package'] = 'footprint'
 g_suppliers['LCSC']['equal'] = ('PartNumber', 'SupplierRef')
 g_suppliers['LCSC']['sorted'] = ('Manufacturer', 'PartNumber')
 g_suppliers['LCSC']['grouped'] = True
-g_suppliers['LCSC']['pclfiles'] = ()
+g_suppliers['LCSC']['generatecpl'] = False
 
 
-def getequal(supplier):
+def getEqual(supplier):
     if supplier in g_suppliers:
         return g_suppliers[supplier]['equal']
     return g_suppliers['Default']['equal']
 
-def getsorted(supplier):
+def getSorted(supplier):
     if supplier in g_suppliers:
         return g_suppliers[supplier]['sorted']
     return g_suppliers['Default']['sorted']
 
-def needgrouping(supplier):
+def needGrouping(supplier):
     if supplier in g_suppliers:
         return g_suppliers[supplier]['grouped']
     return g_suppliers['Default']['grouped']
@@ -96,26 +97,27 @@ def getFields(supplier):
         return g_suppliers[supplier]['fields']
     return g_suppliers['Default']['fields']
 
-def rewritecpl(supplier):
+def generateCpl(supplier):
     if supplier in g_suppliers:
-        return len(g_suppliers[supplier]['pclfiles']) != 0
-    return len(g_suppliers['Default']['pclfiles']) != 0
+        return g_suppliers[supplier]['generatecpl']
+    return g_suppliers['Default']['generatecpl']
 
-def getcpl(supplier):
+def getHeaders(supplier):
     if supplier in g_suppliers:
-        return g_suppliers[supplier]['pclfiles']
-    return g_suppliers['Default']['pclfiles']
-
-def getheaders(supplier):
-    if supplier in g_suppliers:
-        return g_suppliers[supplier]['pclheaders']
+        return g_suppliers[supplier]['cplheaders']
     return ()
 
-def getoutput(path, supplier, post, ext='csv'):
-    return "%s_%s_%s.%s" % (path, supplier.title(), post, ext)
+def getInputs(path):
+    inputs = []
+    for post in g_posfiles:
+        inputs.append(getInput(path, post))
+    return inputs
 
-def getinput(path, post, ext='csv'):
+def getInput(path, post, ext='csv'):
     return "%s-%s.%s" % (path, post, ext)
+
+def getOutput(path, supplier, post, ext='csv'):
+    return "%s_%s_%s.%s" % (path, supplier.title(), post, ext)
 
 
 class Part(object):
@@ -148,21 +150,21 @@ class Part(object):
     def __eq__(self, other):
         if self.Supplier != other.Supplier:
             return False
-        attrs = getequal(self.Supplier)
-        return (getattr(self, p) for p in attrs) == (getattr(other, p) for p in attrs)
+        attrs = getEqual(self.Supplier)
+        return (getattr(self, a) for a in attrs) == (getattr(other, a) for a in attrs)
 
     def __lt__(self, other):
         if self.Supplier != other.Supplier:
             return self.Supplier < other.Supplier
-        attrs = getsorted(self.Supplier)
-        return (getattr(self, p) for p in attrs) < (getattr(other, p) for p in attrs)
+        attrs = getSorted(self.Supplier)
+        return (getattr(self, a) for a in attrs) < (getattr(other, a) for a in attrs)
 
-    def setFields(self, fields, suppliers):
+    def setCustomFields(self, fields, suppliers):
         for f in fields:
             name = f.attrib['name']
             if name in getFields(self.Supplier).values():
                 setattr(self, name, f.text)
-        if all((getattr(self, p) for p in getequal(self.Supplier))):
+        if all((getattr(self, a) for a in getEqual(self.Supplier))):
             if self.Supplier not in suppliers:
                 suppliers.append(self.Supplier)
             return True
@@ -183,24 +185,26 @@ def parseXml(file):
             missings.append(part.ref)
             continue
         fields = f.find('fields')
-        if not part.setFields(fields, suppliers):
+        if not part.setCustomFields(fields, suppliers):
             missings.append(part.ref)
             continue
 
-        if needgrouping(part.Supplier):
+        if needGrouping(part.Supplier):
             exist = next((p for p in parts if p == part), None)
-            if exist is not None:
+            if exist is None:
+                parts.append(part)
+            else:
                 exist.Quantity += part.Quantity
-                continue
-
-        parts.append(part)
+        else:
+            for i in range(part.Quantity):
+                parts.append(part)
 
     return suppliers, parts, missings
 
 
 def writeCsv(suppliers, parts, path):
     for supplier in suppliers:
-        file = getoutput(path, supplier, g_bomext)
+        file = getOutput(path, supplier, g_bomext)
         columns = getFields(supplier).keys()
         fieldsname = getFields(supplier).items()
         with open(file, 'w') as csvfile:
@@ -222,13 +226,12 @@ def writeCsv(suppliers, parts, path):
 def rewriteCsv(suppliers, path):
     rewrited = {}
     for supplier in suppliers:
-        if rewritecpl(supplier):
+        if generateCpl(supplier):
             rewrited[supplier] = False
-            for post in getcpl(supplier):
-                input = getinput(path, post)
+            for input in getInputs(path):
                 if os.path.isfile(input):
-                    output = getoutput(path, supplier, g_cplext)
-                    headers = getheaders(supplier)
+                    output = getOutput(path, supplier, g_cplext)
+                    headers = getHeaders(supplier)
                     copyCsv(input, output, headers)
                     rewrited[supplier] = True
                     break
@@ -255,7 +258,7 @@ if __name__ == "__main__":
     print("")
     print("Generating BOM csv file for:")
     for supplier in suppliers:
-        print("%s: %s" % (supplier, getoutput(path, supplier, g_bomext)))
+        print("%s: %s" % (supplier, getOutput(path, supplier, g_bomext)))
 
     if len(missings) > 0:
         print("")
@@ -270,11 +273,11 @@ if __name__ == "__main__":
         print("Generating CPL (Component Placement List) csv file for:")
     for supplier, status in suppliers.items():
         if status:
-            print("%s: %s:" % (supplier, getoutput(path, supplier, g_cplext)))
+            print("%s: %s:" % (supplier, getOutput(path, supplier, g_cplext)))
         else:
             print("")
             print("*******************************************************************************")
             print("Error can't retrieve a position file like:")
-            for post in getcpl(supplier):
-                print(getinput(path, post))
+            for input in getInputs(path):
+                print(input)
             print("*******************************************************************************")
