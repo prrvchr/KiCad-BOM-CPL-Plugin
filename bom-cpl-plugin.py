@@ -1,6 +1,13 @@
 #!
 # -*- coding: utf-8 -*-
 
+
+__author__ = "prrvchr@gmail.com"
+__copyright__ = "Copyright 2020, prrvchr"
+__license__ = "Mozilla Public License v2 or GNU Lesser General Public License v3"
+__version__ = "0.0.1"
+
+
 """
 @package
 Generates a BOM or CPL csv file compatible with:
