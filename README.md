@@ -1,7 +1,6 @@
 **The use of this software subjects you to our** [Terms Of Use](https://prrvchr.github.io/KiCad-BOM-CPL-Plugin/TermsOfUse_en)
 
-## KiCad python plugin that generate BOM and CPL files for  
-JCLPcb, LCSC and even any other supplier... such as Farnell.
+## KiCad python plugin that generate BOM and CPL files for JCLPcb, LCSC and even any other supplier... such as Farnell.
 
 ### Install:
 
