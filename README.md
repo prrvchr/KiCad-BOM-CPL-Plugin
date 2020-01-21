@@ -47,7 +47,7 @@ If you know a little Python, the grouping and the order of the components in the
 When launching the plugin (in Eeschema BOM) it will create as many BOM files as there are different `Supplier` encountered.
 
 In order to generate a BOM file for several pieces, it is possible to add a quantity argument at the end of the plugin command line (ie: `"bom-cpl-plugin.py" "%I" "%O"  100` for 100 pieces).
-Without this argument or with an invalid value, a default quantity of 1 will be used.
+If the supplier is not configured for regrouping, or without this argument or with an invalid value, a default quantity of 1 will be used.
 
 It also creates the CPL file for JLCPcb from one of the position files found in the working directory (ie: `your_project-all-pos.csv`, `your_project-top-pos.csv`, `your_project-bottom-pos.csv`).
 A correction on the rotations will be made according to the `Rotation` field of each component.
