@@ -2,11 +2,11 @@
 
 ## KiCad python plugin that generate BOM and CPL files for JCLPcb, LCSC and even any other supplier... such as Farnell.
 
-# KiCad BOM CPL Plugin v0.0.3
+# KiCad BOM CPL Plugin v0.0.4
 
 ### Install:
 
-- Download the [plugin](https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/archive/v0.0.3.zip)
+- Download the [plugin](https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/archive/v0.0.4.zip)
 - Unzip and put the plugin file `bom-cpl-plugin.py` in your KiCad working directory.
 - In KiCad open Eeschema go to BOM (Generate Bill Of Materials) and add A New Plugin
 

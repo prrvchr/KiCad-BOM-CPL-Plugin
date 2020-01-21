@@ -5,7 +5,7 @@
 __author__ = "prrvchr@gmail.com"
 __copyright__ = "Copyright 2020, prrvchr"
 __license__ = "Mozilla Public License v2 or GNU Lesser General Public License v3"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 """
@@ -277,8 +277,8 @@ def parseXml(xml, quantity):
         if component.Quantity == 0:
             missings.append(component.ref)
             continue
-        component.Quantity *= quantity
         if needGrouping(component.Supplier):
+            component.Quantity *= quantity
             exist = next((c for c in components if c == component), None)
             if exist is None:
                 components.append(component)
