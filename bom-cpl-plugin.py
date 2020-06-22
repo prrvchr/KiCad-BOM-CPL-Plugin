@@ -5,7 +5,7 @@
 __author__ = "prrvchr@gmail.com"
 __copyright__ = "Copyright 2020, prrvchr"
 __license__ = "Mozilla Public License v2 or GNU Lesser General Public License v3"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 
 """
@@ -355,7 +355,8 @@ def getArguments():
     path = sys.argv[2]
     quantity = 1
     if len(sys.argv) > 3:
-        quantity = getInteger(sys.argv[3], 1, 1)
+        arg = sys.argv[3].split('=')[-1]
+        quantity = getInteger(arg, 1, 1)
     return xml, path, quantity
 
 
