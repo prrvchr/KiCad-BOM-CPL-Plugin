@@ -182,17 +182,17 @@ class Component(object):
         self.ref = component.attrib['ref']
         value = component.find('value')
         if value is not None:
-            self.value = value.text
+            self.value = value.text.strip()
         else:
             self.value = ''
         footprint = component.find('footprint')
         if footprint is not None:
-            self.footprint = footprint.text.split(':').pop()
+            self.footprint = footprint.text.strip().split(':').pop()
         else:
             self.footprint = ''
         supplier = component.find('./fields/field[@name="Supplier"]')
         if supplier is not None:
-            self._supplier = supplier.text
+            self._supplier = supplier.text.strip()
         else:
             self._supplier = ''
         self.Manufacturer = ''
@@ -229,23 +229,23 @@ class Component(object):
     def setCustomFields(self, fields, suppliers):
         manufacturer = fields.find('./field[@name="Manufacturer"]')
         if manufacturer is not None:
-            self.Manufacturer = manufacturer.text
+            self.Manufacturer = manufacturer.text.strip()
         partnumber = fields.find('./field[@name="PartNumber"]')
         if partnumber is not None:
-            self.PartNumber = partnumber.text
+            self.PartNumber = partnumber.text.strip()
         reference = fields.find('./field[@name="%sRef"]' % self._supplier)
         if reference is not None:
-            self.SupplierRef = reference.text
+            self.SupplierRef = reference.text.strip()
         else:
             reference = fields.find('./field[@name="SupplierRef"]')
             if reference is not None:
-                self.SupplierRef = reference.text
+                self.SupplierRef = reference.text.strip()
         rotation = fields.find('./field[@name="Rotation"]')
         if rotation is not None:
-            self.Rotation = getInteger(rotation.text, 0)
+            self.Rotation = getInteger(rotation.text.strip(), 0)
         quantity = fields.find('./field[@name="Quantity"]')
         if quantity is not None:
-            self.Quantity = getInteger(quantity.text, 0, 0)
+            self.Quantity = getInteger(quantity.text.strip(), 0, 0)
         if all((getattr(self, a) for a in getValid(self.Supplier))):
             if self.Supplier not in suppliers:
                 suppliers.append(self.Supplier)
