@@ -6,16 +6,17 @@
 
 # KiCad BOM CPL Plugin v0.0.5
 
-### Install:
+## Install:
 
 - Download the [plugin][7] [![Version][8]][7]
 - Put the plugin file `bom-cpl-plugin.py` in your KiCad working directory.
 - In KiCad open Eeschema go to BOM (Generate Bill Of Materials) and add A New Plugin
 
+___
 
-### Use:
+## Use:
 
-#### Required Eeschema custom fields:
+### Required Eeschema custom fields:
 
 It is necessary for the operation to add 4 additional custom fields in Eeschema, which are:
 - `Manufacturer`
@@ -28,7 +29,7 @@ The required field `Supplier` must be set to one of the predefined supplier (LCS
 The required field `SupplierRef` can be replaced by other custom fields such as: `LCSCRef` or `JLCPcbRef` in order to make possible the referencing of several suppliers on a Eeschema component.
 In this case, changing the value of the `Supplier` field will allow you to switch to the correct supplier reference automatically.
 
-#### Optional Eeschema custom fields:
+### Optional Eeschema custom fields:
 
 Two additional fields can be add to an Eeschema componant, witch are:
 - `Quantity`
@@ -40,7 +41,7 @@ If value is set to 0 or is invalid, the component will not be integrated to any 
 
 The optional `Rotation` field allow to correct rotation, if needed when generating the CPL file...
 
-#### Customisation:
+### Customisation:
 
 If necessary, a grouping is carried out on the quantities, making it possible to generate a single row for identical components in the BOM file.
 
@@ -54,11 +55,13 @@ If the supplier is not configured for regrouping, or without this argument or wi
 It also creates the CPL file for JLCPcb from one of the position files found in the working directory (ie: `your_project-all-pos.csv`, `your_project-top-pos.csv`, `your_project-bottom-pos.csv`).
 A correction on the rotations will be made according to the `Rotation` field of each component.
 
-### Predefined suppliers:
+___
+
+## Predefined suppliers:
 
 This plugin has been configured to work with LCSC, JLCPcb and also with many other suppliers ...
 
-#### LCSC configuration:
+### LCSC configuration:
 
 CSV BOM file columns:
 - Quantity
@@ -74,7 +77,7 @@ CSV BOM componants are order by: Manufacturer, PartNumber
 
 No CPL file will be generated.
 
-#### JLCPcb configuration:
+### JLCPcb configuration:
 
 CSV BOM file columns:
 - Comment
@@ -88,7 +91,7 @@ CSV BOM componants are order by: SupplierRef
 
 CPL file will be generated if a position file can be found.
 
-#### Default configuration:
+### Default configuration:
 
 This configuration applies to all other suppliers (other than LCSC, JLCPcb)
 
@@ -106,12 +109,15 @@ CSV BOM componants are order by: Manufacturer, PartNumber
 
 No CPL file will be generated.
 
+___
 
-### Has been tested with:
+## Has been tested with:
 
 * KiCad 5.1.5 - Ubuntu 18.04 - LxQt 0.11.1
 
-### If errors occur:
+___
+
+## If errors occur:
 
 In case of problem, :-(  
 I encourage you to create an [issue][9]  
