@@ -1,12 +1,12 @@
 **The use of this software subjects you to our** [Terms Of Use][1]
 
-## KiCad python plugin that generate BOM and CPL files for JCLPcb, LCSC and even any other supplier... such as Farnell.
+## KiCad python plugin that generate BOM and CPL files for [JLCPcb][2], [LCSC][3] and even any other supplier... such as [Farnell][4].
 
 # KiCad BOM CPL Plugin v0.0.5
 
 ### Install:
 
-- Download the [plugin][2] [![Version][3]][2]
+- Download the [plugin][5] [![Version][6]][5]
 - Put the plugin file `bom-cpl-plugin.py` in your KiCad working directory.
 - In KiCad open Eeschema go to BOM (Generate Bill Of Materials) and add A New Plugin
 
@@ -78,7 +78,7 @@ CSV BOM file columns:
 - Comment
 - Designator
 - Footprint
-- LCSC Part #
+- JLCPcb Part #
 
 No CSV grouping is performed, in the absence of a BOM Quantity column
 
@@ -112,10 +112,13 @@ No CPL file will be generated.
 ### If errors occur:
 
 In case of problem, :-(  
-I encourage you to create an [issue][4]  
+I encourage you to create an [issue][7]  
 I will try to solve it :-)
 
 [1]: <https://prrvchr.github.io/KiCad-BOM-CPL-Plugin/TermsOfUse_en>
-[2]: <https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/releases/latest/download/bom-cpl-plugin.py>
-[3]: <https://img.shields.io/github/downloads/prrvchr/KiCad-BOM-CPL-Plugin/latest/total?label=v0.0.5#right>
-[4]: <https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/issues/new>
+[2]: <https://jlcpcb.com>
+[3]: <https://lcsc.com>
+[4]: <https://fr.farnell.com>
+[5]: <https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/releases/latest/download/bom-cpl-plugin.py>
+[6]: <https://img.shields.io/github/downloads/prrvchr/KiCad-BOM-CPL-Plugin/latest/total?label=v0.0.5#right>
+[7]: <https://github.com/prrvchr/KiCad-BOM-CPL-Plugin/issues/new>
