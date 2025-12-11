@@ -1,6 +1,6 @@
 # [![KiCad logo][1]][2] Documentation
 
-**The use of this software subjects you to our** [Terms Of Use][3]
+**The use of this software subjects you to our [Terms Of Use][3]**
 
 **KiCad python plugin that generate BOM and CPL files for [JLCPcb][4], [LCSC][5] and even any other supplier... such as [Farnell][6].**
 
